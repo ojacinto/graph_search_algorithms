@@ -64,6 +64,12 @@ class Main(object):
             str(depth)
         ]
         rows.append(depth_search)
+        kruskal = [
+            'Kruskal',
+            str(adjacents2),
+            '(Minimum Spanning Tree) => '+ str(graph2.kruskal())
+        ]
+        rows.append(kruskal)
         dijkstra = [
             'Dijkstra',
             str(adjacents2),
@@ -73,5 +79,6 @@ class Main(object):
         table.add_rows(rows)
         print(table.draw() + "\n")
         graph2.dijkstra_search('a', 'e')
+
 
 Main()

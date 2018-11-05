@@ -28,7 +28,8 @@ This graph is used to test the methods of width search and depth search.
 
 `graph2.txt`
 ===========
-This graph is used to test the dijkstra method (shortest path)
+This graph is used to test the dijkstra method (shortest path) and
+the search for the minimum expansion tree (Kruskal)
 
 As a controller, the main.py module is used, which prints the results of the three algorithms in the console.
 

@@ -13,6 +13,8 @@ from __future__ import (division as _py3_division,
 from collections import deque, OrderedDict
 import sys, heapq
 
+parent_aux = dict()
+rank = dict()
 
 class Vertex(object):
     '''Represents a vertex of a graph
@@ -88,6 +90,7 @@ class Graph(object):
     def __init__(self):
         self.list_vertices = OrderedDict()
         self.count_vertices = 0
+        self.edges = []
         self.count_edges = 0
 
     def __contains__(self, vertex):
@@ -116,15 +119,18 @@ class Graph(object):
         '''Add an edge to the graph and update the vertex adjacency list.
 
         '''
+        weight = int(weight)
         if a not in self.list_vertices.keys():
             nv_a = self.add_vertex(a)
         if b not in self.list_vertices.keys():
             nv_b = self.add_vertex(b)
-        self.list_vertices[a].add_neighbour(self.list_vertices[b].id, int(weight))
+        self.list_vertices[a].add_neighbour(self.list_vertices[b].id, weight)
         self.count_edges +=1
         if not directed:
-            self.list_vertices[b].add_neighbour(self.list_vertices[a].id, int(weight))
+            self.list_vertices[b].add_neighbour(self.list_vertices[a].id, weight)
             self.count_edges +=1
+        edge = (weight, a, b)
+        self.edges.append(edge)
         return self
 
     def get_vertices(self):
@@ -286,3 +292,61 @@ class Graph(object):
 ##############################################################################
 #Kruskal
 ##############################################################################
+    def make_set(self, vertex):
+        '''Init the structure parent_aux and rank
+
+        '''
+        parent_aux[vertex] = vertex
+        rank[vertex] = 0
+
+    def find(self, vertex):
+        '''Find the root of the vertice passed by parameter within list parent_aux
+
+        '''
+        if parent_aux[vertex] != vertex:
+            parent_aux[vertex] = self.find(parent_aux[vertex])
+        return parent_aux[vertex]
+
+    def union(self, vertex_a, vertex_b):
+        '''Allows connecting 2 related components, this is done by the
+        following:
+         1- Get the root of the vertex a.
+         2- Get the root of the vertex b.
+         3- Update the father of some of the roots, assigning him as the new
+            father the other root.
+
+        '''
+        root_a = self.find(vertex_a)
+        root_b = self.find(vertex_b)
+        if root_a != root_b:
+            if rank[root_a] > rank[root_b]:
+                parent_aux[root_b] = root_a
+	    else:
+	        parent_aux[root_a] = root_b
+	if rank[root_a] == rank[root_b]: rank[root_b] += 1
+
+    def kruskal(self):
+        '''Find the Minimum Spanning Tree (MST) in the graph, calculate the
+        cost and verify if the MST is valid.
+
+        The problem of finding the Minimum Spanning Tree (MST) can be solved with
+        several algorithms, the most known with Prim and Kruskal both use
+        greedy techniques (greedy).
+
+        '''
+        mst_cost = 0
+        # Minimum Spanning Tree
+        mst = set()
+        self.edges.sort()
+        [self.make_set(v) for v in self.list_vertices.keys()]
+        for edge in self.edges:
+            weight, vertex_a, vertex_b = edge
+            if self.find(vertex_a) != self.find(vertex_b):
+                self.union(vertex_a, vertex_b)
+                mst.add(edge)
+                mst_cost += weight
+        # The MST is valid if the number of edges must be equal to the number
+        # of vertices - 1. This is true because the MST must have all the
+        # vertices of the graph entered and in addition there must be no cycles
+        valid = True if len(mst) == self.count_vertices - 1 else False
+        return {'mst': sorted(mst), 'cost': mst_cost, 'valid': valid}
