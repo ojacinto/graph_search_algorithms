@@ -11,8 +11,7 @@ from __future__ import (division as _py3_division,
                         absolute_import as _py3_abs_import)
 
 from collections import deque
-from graph import Graph
-from dijkstra import sys, heapq, shortest, dijkstra_search
+from graph import Graph, sys, heapq
 from texttable import Texttable
 
 class Main(object):
@@ -73,5 +72,6 @@ class Main(object):
         rows.append(dijkstra)
         table.add_rows(rows)
         print(table.draw() + "\n")
+        graph2.dijkstra_search('a', 'e')
 
-        dijkstra_search(graph2, 'a', 'e')
+Main()
