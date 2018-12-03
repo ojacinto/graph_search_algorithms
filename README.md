@@ -1,6 +1,6 @@
 
-`Search algorithms for graphs: (Search in width, depth and dijikstra)`
-======================================================================
+`Search algorithms for graphs: (Search in width, depth, dijikstra and kruskal)`
+===============================================================================
 
 The Operations Graphs are a data structure that serves to model an infinity of
 problems that can be expressed in a computational way. Unlike the tree
